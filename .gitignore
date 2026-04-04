@@ -1,0 +1,14 @@
+# Terraform state — never commit
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+terraform.tfvars
+
+# Build artifacts
+dist/
+
+# Python
+.env
+__pycache__/
+*.pyc
