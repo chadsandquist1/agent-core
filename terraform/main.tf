@@ -2,14 +2,12 @@ terraform {
   required_providers {
     aws = { source = "hashicorp/aws", version = "~> 5.0" }
   }
-  # State is local — *.tfstate is gitignored.
-  # For production, replace with an S3 backend:
-  #
-  # backend "s3" {
-  #   bucket = "your-tf-state-bucket"
-  #   key    = "agentcore/hello-world/terraform.tfstate"
-  #   region = "us-east-1"
-  # }
+  # bucket is supplied via -backend-config in CI (TF_STATE_BUCKET Actions variable)
+  # or locally: terraform init -backend-config="bucket=your-tf-state-bucket"
+  backend "s3" {
+    key    = "agentcore/hello-world/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
