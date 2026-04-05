@@ -40,15 +40,12 @@ artifact = {
 network = {"networkMode": "PUBLIC"}
 
 # Check if runtime already exists
-paginator = client.get_paginator("list_agent_runtimes")
-existing_id = None
-for page in paginator.paginate():
-    for r in page.get("agentRuntimes", []):
-        if r["agentRuntimeName"] == RUNTIME_NAME:
-            existing_id = r["agentRuntimeId"]
-            break
-    if existing_id:
-        break
+response = client.list_agent_runtimes()
+existing_id = next(
+    (r["agentRuntimeId"] for r in response.get("agentRuntimes", [])
+     if r["agentRuntimeName"] == RUNTIME_NAME),
+    None
+)
 
 if existing_id:
     print(f"Found existing runtime (id: {existing_id}) — updating...")
