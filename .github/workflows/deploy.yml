@@ -184,11 +184,12 @@ jobs:
       - name: Terraform Init (for outputs)
         run: terraform -chdir=terraform init -input=false -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}"
 
-      - name: Upgrade AWS CLI
-        run: |
-          curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
-          unzip -q awscliv2.zip
-          sudo ./aws/install --update
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install boto3
+        run: pip install boto3 --quiet
 
       - name: Deploy AgentCore runtime
-        run: bash scripts/deploy-runtime.sh
+        run: python scripts/deploy-runtime.py
