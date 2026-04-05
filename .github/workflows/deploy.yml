@@ -189,7 +189,9 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install boto3
-        run: pip install boto3 --quiet
+        run: pip install --upgrade boto3 botocore --quiet
 
       - name: Deploy AgentCore runtime
-        run: python scripts/deploy-runtime.py
+        run: |
+          python -c "import boto3; print('boto3:', boto3.__version__)"
+          python scripts/deploy-runtime.py
