@@ -2,19 +2,22 @@ import boto3
 import json
 import os
 import sys
+from botocore.config import Config
 
 
 def invoke(agent_arn, question):
-    client = boto3.client("bedrock-agentcore", region_name="us-east-1")
+    config = Config(read_timeout=300, connect_timeout=60)
+    client = boto3.client("bedrock-agentcore", region_name="us-east-1", config=config)
     response = client.invoke_agent_runtime(
         agentRuntimeArn=agent_arn,
-        runtimeSessionId="hello-world-session",
+        runtimeSessionId="hello-world-session-00000000000000",
         payload=json.dumps({"prompt": question}).encode(),
     )
-    for event in response.get("body", []):
-        chunk = event.get("chunk", {}).get("bytes", b"")
-        if chunk:
-            print(chunk.decode(), end="", flush=True)
+    stream = response.get("response")
+    if stream:
+        for chunk in stream.iter_chunks():
+            if chunk:
+                print(chunk.decode("utf-8", errors="replace"), end="", flush=True)
     print()
 
 
