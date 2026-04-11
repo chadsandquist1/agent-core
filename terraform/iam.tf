@@ -8,8 +8,19 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-resource "aws_iam_service_linked_role" "bedrock_agentcore" {
-  aws_service_name = "bedrock-agentcore.amazonaws.com"
+# Grant the GitHub Actions deploy role permission to create the AgentCore
+# service linked role (required by CreateAgentRuntime on first use).
+resource "aws_iam_role_policy" "github_actions_slr" {
+  name = "allow-create-agentcore-slr"
+  role = "github-actions-agentcore"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "iam:CreateServiceLinkedRole"
+      Resource = "arn:aws:iam::*:role/aws-service-role/bedrock-agentcore.amazonaws.com/*"
+    }]
+  })
 }
 
 resource "aws_iam_role" "agentcore_execution" {
