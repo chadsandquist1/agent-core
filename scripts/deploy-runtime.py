@@ -32,8 +32,8 @@ client = boto3.client("bedrock-agentcore-control", region_name=REGION)
 
 artifact = {
     "codeConfiguration": {
-        "s3Uri": s3_uri,
-        "entrypoint": "main.py",
+        "code": {"s3Location": {"uri": s3_uri}},
+        "entryPoint": "main.invoke",
         "runtime": "PYTHON_3_12",
     }
 }
