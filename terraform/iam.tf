@@ -8,6 +8,10 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
+resource "aws_iam_service_linked_role" "bedrock_agentcore" {
+  aws_service_name = "bedrock-agentcore.amazonaws.com"
+}
+
 resource "aws_iam_role" "agentcore_execution" {
   name               = "agentcore-hello-world-execution"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
