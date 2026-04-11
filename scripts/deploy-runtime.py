@@ -21,10 +21,11 @@ def tf_output(key):
 
 role_arn   = tf_output("execution_role_arn")
 account_id = tf_output("account_id")
-s3_uri     = f"s3://bedrock-agentcore-code-{account_id}-{REGION}/hello-world/agent.zip"
+s3_bucket  = f"bedrock-agentcore-code-{account_id}-{REGION}"
+s3_prefix  = "hello-world/agent.zip"
 
 print(f"Role ARN: {role_arn}")
-print(f"S3 URI:   {s3_uri}")
+print(f"S3 URI:   s3://{s3_bucket}/{s3_prefix}")
 print()
 
 import boto3
@@ -32,7 +33,7 @@ client = boto3.client("bedrock-agentcore-control", region_name=REGION)
 
 artifact = {
     "codeConfiguration": {
-        "code": {"s3": {"uri": s3_uri}},
+        "code": {"s3": {"bucket": s3_bucket, "prefix": s3_prefix}},
         "entryPoint": ["main.invoke"],
         "runtime": "PYTHON_3_12",
     }
