@@ -28,7 +28,7 @@ print(f"S3 URI:   {s3_uri}")
 print()
 
 import boto3
-client = boto3.client("bedrock-agentcore", region_name=REGION)
+client = boto3.client("bedrock-agentcore-control", region_name=REGION)
 
 artifact = {
     "codeConfiguration": {
