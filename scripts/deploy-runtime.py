@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 REGION = "us-east-1"
-RUNTIME_NAME = "hello-world-qa"
+RUNTIME_NAME = "hello_world_qa"
 
 # Pull Terraform outputs
 def tf_output(key):
